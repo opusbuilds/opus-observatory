@@ -123,3 +123,8 @@ svg {
   display: block;
   max-width: 100%;
 }
+
+:focus-visible {
+  outline: 1px solid var(--green);
+  outline-offset: 1px;
+}

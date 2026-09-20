@@ -20,12 +20,12 @@ const selected = computed({
       <ChevronDown :size="12" />
     </SelectTrigger>
     <SelectPortal>
-      <SelectContent class="content" position="popper" :side-offset="4">
+      <SelectContent class="select-content" position="popper" :side-offset="4">
         <SelectViewport>
-          <SelectItem class="item" :value="ALL">
+          <SelectItem class="select-item" :value="ALL">
             <SelectItemText>{{ placeholder }}</SelectItemText>
           </SelectItem>
-          <SelectItem v-for="o in options" :key="o.value" class="item" :value="o.value">
+          <SelectItem v-for="o in options" :key="o.value" class="select-item" :value="o.value">
             <SelectItemText>{{ o.label }}</SelectItemText>
           </SelectItem>
         </SelectViewport>
@@ -48,8 +48,10 @@ const selected = computed({
   padding: 0.35rem 0.55rem;
   cursor: pointer;
 }
-.content {
+:global(.select-content) {
   min-width: var(--reka-select-trigger-width);
+  max-height: var(--reka-select-content-available-height);
+  overflow-y: auto;
   background: var(--card);
   border: 1px solid var(--line2);
   border-radius: 4px;
@@ -57,12 +59,12 @@ const selected = computed({
   font-size: 12.5px;
   z-index: 10;
 }
-.item {
+:global(.select-item) {
   padding: 0.35rem 0.7rem;
   cursor: pointer;
   outline: none;
 }
-.item[data-highlighted] {
+:global(.select-item[data-highlighted]) {
   background: var(--green-soft);
   color: var(--green);
 }
