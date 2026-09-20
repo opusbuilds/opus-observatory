@@ -16,6 +16,9 @@ export interface Observation {
   status: Verdict
   reason: RejectionReason | null
   ocMin: Measurement | null
+  epoch?: number | null
+  tmid?: number | null
+  tmidErr?: number | null
   depth: Measurement | null
   scatterPct: number | null
   note: string
@@ -26,12 +29,12 @@ export interface Observation {
 }
 
 export interface Ephemeris {
-  t0: number
-  period: number
-  t0Err: number
-  periodErr: number
+  t0: number | null
+  period: number | null
+  t0Err: number | null
+  periodErr: number | null
   source: string
-  fetched: string
+  fetched: string | null
 }
 
 export interface Target {
@@ -40,7 +43,7 @@ export interface Target {
   vmag: number
   periodDays: number
   archive: Ephemeris
-  exoclock: Ephemeris
+  exoclock: Ephemeris | null
   derived: string
   note: string | null
   faint: boolean

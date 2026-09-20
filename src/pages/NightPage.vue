@@ -39,11 +39,12 @@ const ratios = computed(() => {
 </script>
 
 <template>
-  <template v-if="row && triage">
+  <template v-if="row">
     <Breadcrumb :trail="[{ label: 'ledger', to: '/' }, { label: row.target, to: { name: 'target', params: { slug: slugify(row.target) } } }, { label: row.obsDate }]" />
     <h1>{{ row.target }} · {{ row.obsDate }}</h1>
     <p class="lede"><VerdictTag :row="row" />&nbsp;&nbsp;{{ row.note }}</p>
 
+    <template v-if="triage">
     <h2>Triage evidence</h2>
     <PlotFrame>
       <CloudPlot :triage="triage" />
@@ -67,6 +68,10 @@ const ratios = computed(() => {
     </CardRow>
     <h3>Verdict block · the tool's own words</h3>
     <VerdictClauses :triage="triage" />
+    </template>
+    <Aside v-else>
+      The per-frame triage evidence for this night (stars per frame, the target's flux against the floor, the comparison box, the verdict clauses) is not yet published; the note above carries the verdict and its reasons.
+    </Aside>
 
     <template v-if="fit && row.ocMin && row.depth && row.scatterPct !== null">
       <h2>Fit</h2>
@@ -89,6 +94,18 @@ const ratios = computed(() => {
       <h2>Pre-registration · predicted vs delivered</h2>
       <Scorecard :fit="fit" />
 
+      <template v-else-if="row.image">
+        <h2>Fit</h2>
+        <PlotFrame>
+          <img :src="row.image ?? undefined" :alt="`Light curve of ${row.target}, ${row.obsDate}`" class="curve" />
+          <template #caption>The reduction's light curve as produced. The fitted model, the bar check and the pre-registration scorecard will appear here when the fit records are published.</template>
+        </PlotFrame>
+        <CardRow v-if="row.ocMin && row.depth && row.scatterPct !== null">
+          <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" sub="against the archive ephemeris; the target page shows ExoClock where checked" />
+          <MiniCard title="depth R²ₚ/R²★" :value="withBar(row.depth, 4)" :sub="`scatter ${percent(row.scatterPct)}`" />
+        </CardRow>
+      </template>
+
       <template v-if="checks.length">
         <h2>Cross-check · same frames, other hands</h2>
         <CrossCheckTable :checks="checks" />
@@ -103,3 +120,11 @@ const ratios = computed(() => {
     <p class="lede">No row in the ledger carries that id.</p>
   </template>
 </template>
+
+<style scoped>
+.curve {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+</style>

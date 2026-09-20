@@ -16,7 +16,8 @@ const target = computed(() => api.target(props.slug))
 const rows = computed(() => (target.value ? api.observationsFor(target.value.name) : []))
 const oc = computed(() => (target.value ? api.ocSeries(target.value.name) : null))
 
-const ephemeris = (e: Ephemeris) => `T0 ${e.t0.toFixed(4)} BJD, P ${e.period.toFixed(7)} d · ${e.source}, fetched ${e.fetched}`
+const ephemeris = (e: Ephemeris | null) =>
+  e && e.t0 !== null && e.period !== null ? `T0 ${e.t0.toFixed(4)} BJD, P ${e.period.toFixed(7)} d · ${e.source}, fetched ${e.fetched ?? 'n/a'}` : 'not checked against ExoClock yet'
 
 const legend = [
   { label: 'this instrument', kind: 'dot', color: 'var(--ink)' },
@@ -31,7 +32,7 @@ const legend = [
     <Breadcrumb :trail="[{ label: 'targets', to: '/targets' }, { label: target.name }]" />
     <h1>{{ target.name }}</h1>
     <p class="lede">
-      V {{ target.vmag }} · P {{ target.periodDays.toFixed(5) }} d · {{ target.opened }} nights opened, {{ target.fitted }} fitted.
+      V {{ target.vmag ?? '?' }} · P {{ target.periodDays?.toFixed(5) ?? '?' }} d · {{ target.opened }} nights opened, {{ target.fitted }} fitted.
       <template v-if="target.note"> {{ target.note }}</template>
     </p>
     <Aside v-if="target.faint">
@@ -43,12 +44,12 @@ const legend = [
       <PlotFrame>
         <OcPlot :series="oc" />
         <template #caption>
-          Observed minus calculated mid-time against epoch. The green line is ExoClock's verified ephemeris with its band; the dashed red line is the archive prior propagated forward with its widening band, 5.6 minutes stale by row 52. The filled point is this instrument's; hollow points are other observers' reductions of the same frames.
+          Observed minus calculated mid-time against epoch. Where ExoClock has a verified ephemeris it is the green zero line with its band and the dashed red line is the archive prior propagated forward with its widening band; where it does not, the archive ephemeris is the zero line. Filled points are this instrument's; hollow points, when published, are other observers' reductions of the same frames.
         </template>
       </PlotFrame>
       <PlotLegend :items="[...legend]" />
       <Aside>
-        The plot makes the two findings visible at once: the archive prior drifts, and this instrument's point sits where the good clock says it should, a third of a sigma against an ephemeris already good to 47 seconds. It adds nothing to that clock, and it is shown so that a point that adds nothing is seen to add nothing.
+        A point is shown against the best available clock beside that clock's own bar, so a point that adds nothing to it is seen to add nothing. Where the archive prior has drifted from the verified ephemeris, the red band shows by how much.
       </Aside>
     </template>
     <PlotFrame v-else>

@@ -1,7 +1,7 @@
 <template>
   <footer class="site">
     every reduction recorded · rejections with reasons · nothing submitted until the community says yes<br />
-    <span>this is a clickable mockup with invented example data, built to show the shape of the site. the ledger, the tools and the meaning of a row stay with the reducer.</span>
+    <span>the ledger, targets and totals are live from the reducer's published record; per-night triage evidence, fits and cross-checks are not yet published and their panels say so. the nights listing and the run tab are still example data.</span>
   </footer>
 </template>
 

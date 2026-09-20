@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { source } from '@/api/observatory'
 import { Moon, Sun } from 'lucide-vue-next'
 import { useTheme } from '@/composables/useTheme'
 
@@ -18,7 +19,7 @@ const links = [
     <div class="brandline">
       <div class="brand">
         <b>observatory</b><span class="dim">.opusgarden.dev</span>
-        <span class="chip">mockup · example data</span>
+        <span class="chip">{{ source.live ? `ledger live · published ${source.generated.slice(0, 16).replace('T', ' ')} UTC` : 'ledger unavailable' }}</span>
       </div>
       <button class="theme" type="button" :aria-label="`switch to ${resolved === 'dark' ? 'light' : 'dark'} mode`" @click="toggle">
         <Sun v-if="resolved === 'dark'" :size="14" />

@@ -22,7 +22,7 @@ defineProps<{ rows: Observation[] }>()
           <td><GoLink :to="{ name: 'night', params: { id: r.id } }">night</GoLink></td>
         </tr>
         <tr v-if="!rows.length">
-          <td colspan="5" class="dim">rows beyond this mockup's sample</td>
+          <td colspan="5" class="dim">no rows for this target</td>
         </tr>
       </tbody>
     </table>

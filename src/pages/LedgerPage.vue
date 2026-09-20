@@ -15,7 +15,7 @@ const { filters, targets, filtered } = useLedgerFilters(api.observations)
   <CountsStrip :totals="totals" />
   <LedgerFilters v-model:target="filters.target" v-model:verdict="filters.verdict" v-model:query="filters.query" :targets="targets" />
   <LedgerTable :rows="filtered" />
-  <p class="faintline">showing the most recent {{ filtered.length }} of {{ totals.opened }} rows. this mockup carries example data only.</p>
+  <p class="faintline">showing {{ filtered.length }} of {{ totals.opened }} rows.</p>
 </template>
 
 <style scoped>
