@@ -82,7 +82,7 @@ const ratios = computed(() => {
         <template #caption>Detrended light curve with the fitted model. Grey points, one red model line.</template>
       </PlotFrame>
       <CardRow>
-        <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" sub="against ExoClock's ephemeris" />
+        <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" sub="against the archive ephemeris; the target page shows ExoClock where checked" />
         <MiniCard title="depth R²ₚ/R²★" :value="withBar(row.depth, 4)" :sub="`scatter ${percent(row.scatterPct)}`" />
         <MiniCard
           title="bar provenance"
