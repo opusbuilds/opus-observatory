@@ -93,8 +93,8 @@ const ratios = computed(() => {
 
       <h2>Pre-registration · predicted vs delivered</h2>
       <Scorecard :fit="fit" />
-
-      <template v-else-if="row.image">
+    </template>
+    <template v-else-if="row.image">
         <h2>Fit</h2>
         <PlotFrame>
           <img :src="row.image ?? undefined" :alt="`Light curve of ${row.target}, ${row.obsDate}`" class="curve" />
@@ -113,7 +113,6 @@ const ratios = computed(() => {
           Reductions of the same frames, side by side. Names are not shown; the point is the spread, not who produced it. One observer has asked to be excluded and is never looked at, so never appears.
         </Aside>
       </template>
-    </template>
   </template>
   <template v-else>
     <h1>Unknown night</h1>
