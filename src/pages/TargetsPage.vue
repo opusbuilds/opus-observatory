@@ -16,8 +16,8 @@ const targets = api.targets()
       <tbody>
         <tr v-for="t in targets" :key="t.slug">
           <td>{{ t.name }}</td>
-          <td class="num">{{ t.vmag.toFixed(1) }}</td>
-          <td class="num">{{ t.periodDays.toFixed(5) }} d</td>
+          <td class="num">{{ t.vmag?.toFixed(1) ?? '—' }}</td>
+          <td class="num">{{ t.periodDays != null ? `${t.periodDays.toFixed(5)} d` : '—' }}</td>
           <td class="num">{{ t.opened }}</td>
           <td class="num">{{ t.fitted }}</td>
           <td><GoLink :to="{ name: 'target', params: { slug: t.slug } }">open</GoLink></td>

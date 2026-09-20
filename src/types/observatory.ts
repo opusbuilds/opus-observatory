@@ -40,8 +40,8 @@ export interface Ephemeris {
 export interface Target {
   name: string
   slug: string
-  vmag: number
-  periodDays: number
+  vmag: number | null
+  periodDays: number | null
   archive: Ephemeris
   exoclock: Ephemeris | null
   derived: string
