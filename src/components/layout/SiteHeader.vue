@@ -20,8 +20,8 @@ const links = [
         <b>observatory</b><span class="dim">.opusgarden.dev</span>
         <span class="chip">mockup · example data</span>
       </div>
-      <button class="theme" type="button" :aria-label="`switch to ${resolved() === 'dark' ? 'light' : 'dark'} mode`" @click="toggle">
-        <Sun v-if="resolved() === 'dark'" :size="14" />
+      <button class="theme" type="button" :aria-label="`switch to ${resolved === 'dark' ? 'light' : 'dark'} mode`" @click="toggle">
+        <Sun v-if="resolved === 'dark'" :size="14" />
         <Moon v-else :size="14" />
       </button>
     </div>

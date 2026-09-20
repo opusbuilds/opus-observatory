@@ -6,26 +6,29 @@ import VerdictTag from '@/components/ui/VerdictTag.vue'
 import { percent, slugify, withBar } from '@/lib/format'
 import type { Observation } from '@/types/observatory'
 
-defineProps<{ row: Observation; frames: number }>()
+const props = defineProps<{ row: Observation }>()
 const open = ref(false)
+const detailId = `ledger-detail-${props.row.id}`
 </script>
 
 <template>
-  <tr class="r" :aria-expanded="open" @click="open = !open">
-    <td class="dim">{{ row.obsDate }}</td>
+  <tr class="clickable" @click="open = !open">
+    <td>
+      <button type="button" class="toggle" :aria-expanded="open" :aria-controls="detailId" @click.stop="open = !open">{{ row.obsDate }}</button>
+    </td>
     <td>{{ row.target }}</td>
     <td><VerdictTag :row="row" /></td>
     <td class="num"><template v-if="row.ocMin">{{ withBar(row.ocMin, 2, true) }}</template><span v-else class="dim">—</span></td>
     <td class="num"><template v-if="row.depth">{{ withBar(row.depth, 4) }}</template><span v-else class="dim">—</span></td>
     <td class="num"><template v-if="row.scatterPct !== null">{{ percent(row.scatterPct) }}</template><span v-else class="dim">—</span></td>
   </tr>
-  <tr v-if="open" class="expand">
+  <tr v-if="open" :id="detailId" class="expand">
     <td colspan="6">
       <div class="note">{{ row.note }}</div>
       <KeyValue
         :items="[
           { k: 'dataset', v: row.dataset },
-          { k: 'frames', v: `${frames} FITS · ${row.manifest}` },
+          { k: 'frames', v: `${row.frames} FITS · ${row.manifest}` },
           { k: 'obscode', v: row.obscode ?? '— (nothing submitted)' },
         ]"
       />
@@ -38,11 +41,17 @@ const open = ref(false)
 </template>
 
 <style scoped>
-tr.r {
+.toggle {
+  font: inherit;
+  color: var(--faint);
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
 }
-tr.r:hover td {
-  background: var(--card);
+.toggle:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
 }
 .expand {
   background: var(--card);

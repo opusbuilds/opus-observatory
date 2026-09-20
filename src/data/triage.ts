@@ -2,11 +2,6 @@ import { seeded } from '@/lib/rng'
 import type { Observation, TriageFrame, TriageRecord, VerdictClause } from '@/types/observatory'
 import { observations } from './ledger'
 
-const frameCounts: Record<string, number> = {
-  n54: 52, n53: 49, n52b: 55, n52: 61, n51: 58, n50: 47, n49: 44, n48: 31, n47: 63,
-  n46: 57, n45: 52, n44: 40, n43: 50, n42: 60, n41: 45, n40: 28, n39: 54, n38: 48,
-}
-
 const seedPeaks: Record<string, number> = { n54: 141, n53: 163, n52b: 187, n43: 152 }
 
 const window = { start: 0.38, end: 0.78 }
@@ -89,7 +84,7 @@ function clauses(o: Observation, fr: TriageFrame[]): VerdictClause[] {
 }
 
 export const triageRecords: TriageRecord[] = observations.map((o) => {
-  const fr = frames(o, frameCounts[o.id] ?? 50)
+  const fr = frames(o, o.frames)
   const k = kind(o)
   return {
     observationId: o.id,

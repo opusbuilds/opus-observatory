@@ -6,7 +6,7 @@ defineProps<{ fit: FitRecord }>()
 
 <template>
   <div class="tbl-scroll">
-    <table class="score">
+    <table class="ledger">
       <thead>
         <tr><th>line</th><th>predicted</th><th>delivered</th><th></th></tr>
       </thead>
@@ -27,26 +27,6 @@ defineProps<{ fit: FitRecord }>()
 </template>
 
 <style scoped>
-.score {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--mono);
-  font-size: 12.5px;
-}
-.score th {
-  text-align: left;
-  font-weight: 500;
-  color: var(--faint);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.45rem 0.6rem;
-  border-bottom: 1px solid var(--line2);
-}
-.score td {
-  padding: 0.5rem 0.6rem;
-  border-bottom: 1px solid var(--line);
-}
 .hit {
   color: var(--green);
 }

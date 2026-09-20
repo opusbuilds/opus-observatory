@@ -47,12 +47,4 @@ const listing = api.listing()
 }
 .row:last-child {
   border-bottom: none;
-}
-.tgt {
-  min-width: 110px;
-}
-.g {
-  color: var(--muted);
-  flex: 1;
-}
-</style>
+}</style>

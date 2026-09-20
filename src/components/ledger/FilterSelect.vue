@@ -34,7 +34,7 @@ const selected = computed({
   </SelectRoot>
 </template>
 
-<style>
+<style scoped>
 .trigger {
   display: inline-flex;
   align-items: center;

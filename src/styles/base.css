@@ -102,6 +102,23 @@ table.ledger td {
   vertical-align: top;
 }
 
+tr.clickable {
+  cursor: pointer;
+}
+
+tr.clickable:hover td {
+  background: var(--card);
+}
+
+.tgt {
+  min-width: 110px;
+}
+
+.g {
+  color: var(--muted);
+  flex: 1;
+}
+
 svg {
   display: block;
   max-width: 100%;

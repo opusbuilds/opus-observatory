@@ -14,8 +14,6 @@ const props = defineProps<{ slug: string }>()
 
 const target = computed(() => api.target(props.slug))
 const rows = computed(() => (target.value ? api.observationsFor(target.value.name) : []))
-const fitted = computed(() => rows.value.filter((r) => r.status !== 'rejected').length)
-const floorNights = computed(() => rows.value.filter((r) => r.reason === 'floor').length)
 const oc = computed(() => (target.value ? api.ocSeries(target.value.name) : null))
 
 const ephemeris = (e: Ephemeris) => `T0 ${e.t0.toFixed(4)} BJD, P ${e.period.toFixed(7)} d · ${e.source}, fetched ${e.fetched}`
@@ -33,11 +31,11 @@ const legend = [
     <Breadcrumb :trail="[{ label: 'targets', to: '/targets' }, { label: target.name }]" />
     <h1>{{ target.name }}</h1>
     <p class="lede">
-      V {{ target.vmag }} · P {{ target.periodDays.toFixed(5) }} d · {{ rows.length }} nights opened, {{ fitted }} fitted.
+      V {{ target.vmag }} · P {{ target.periodDays.toFixed(5) }} d · {{ target.opened }} nights opened, {{ target.fitted }} fitted.
       <template v-if="target.note"> {{ target.note }}</template>
     </p>
     <Aside v-if="target.faint">
-      {{ api.faintSentence() }} {{ floorNights }} of {{ rows.length }} nights rejected on the 200-count floor (V {{ target.vmag }} against the floor at this instrument's scale).
+      {{ api.faintSentence() }} {{ target.floorNights }} of {{ target.opened }} nights rejected on the 200-count floor (V {{ target.vmag }} against the floor at this instrument's scale).
     </Aside>
 
     <h2>O−C</h2>

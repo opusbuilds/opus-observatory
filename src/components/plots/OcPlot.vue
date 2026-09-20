@@ -1,16 +1,25 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import PlotAxisLabel from './PlotAxisLabel.vue'
-import { axes, polyline, type Frame } from '@/lib/scale'
+import { axes, niceDomain, polyline, type Frame } from '@/lib/scale'
 import type { OcSeries } from '@/types/observatory'
 
 const props = defineProps<{ series: OcSeries }>()
 
 const frame: Frame = { w: 760, h: 300, left: 70, right: 30, top: 24, bottom: 44 }
-const yDomain: [number, number] = [-8, 4]
-const gridlines = [-8, -6, -4, -2, 0, 2, 4]
+const hollowSpacingPx = 14
 
-const sc = computed(() => axes(frame, props.series.epochRange, yDomain))
+const yAxis = computed(() => {
+  const values = [
+    ...props.series.points.flatMap((p) => [p.ocMin.value - p.ocMin.err, p.ocMin.value + p.ocMin.err]),
+    ...props.series.archiveDrift.flatMap((d) => [d.ocMin - d.bandMin, d.ocMin + d.bandMin]),
+    -props.series.exoclockBandMin,
+    props.series.exoclockBandMin,
+  ]
+  return niceDomain(Math.min(...values), Math.max(...values), 4)
+})
+
+const sc = computed(() => axes(frame, props.series.epochRange, yAxis.value.domain))
 
 const archiveBand = computed(() => {
   const { x, y } = sc.value
@@ -26,21 +35,30 @@ const epochTicks = computed(() => {
   return [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(a + (b - a) * f))
 })
 
-const points = computed(() =>
-  props.series.points.map((p) => ({
-    hollow: p.hollow,
-    key: `${p.epoch}-${p.ocMin.value}`,
-    cx: sc.value.x(p.epoch),
-    cy: sc.value.y(p.ocMin.value),
-    y1: sc.value.y(p.ocMin.value - p.ocMin.err),
-    y2: sc.value.y(p.ocMin.value + p.ocMin.err),
-  })),
-)
+const points = computed(() => {
+  const hollowSeen = new Map<number, number>()
+  return props.series.points.map((p, i) => {
+    let dx = 0
+    if (p.hollow) {
+      const n = (hollowSeen.get(p.epoch) ?? 0) + 1
+      hollowSeen.set(p.epoch, n)
+      dx = n * hollowSpacingPx
+    }
+    return {
+      key: i,
+      hollow: p.hollow,
+      cx: sc.value.x(p.epoch) + dx,
+      cy: sc.value.y(p.ocMin.value),
+      y1: sc.value.y(p.ocMin.value - p.ocMin.err),
+      y2: sc.value.y(p.ocMin.value + p.ocMin.err),
+    }
+  })
+})
 </script>
 
 <template>
-  <svg :viewBox="`0 0 ${frame.w} ${frame.h}`" width="100%" role="img" style="min-width: 520px">
-    <template v-for="g in gridlines" :key="g">
+  <svg :viewBox="`0 0 ${frame.w} ${frame.h}`" width="100%" role="img" aria-label="Observed minus calculated mid-time against epoch">
+    <template v-for="g in yAxis.ticks" :key="g">
       <line :x1="frame.left" :y1="sc.y(g)" :x2="frame.w - frame.right" :y2="sc.y(g)" :stroke="g === 0 ? 'var(--line2)' : 'var(--line)'" />
       <PlotAxisLabel :x="frame.left - 10" :y="sc.y(g) + 4" anchor="end">{{ g > 0 ? '+' : '' }}{{ g }}</PlotAxisLabel>
     </template>

@@ -14,6 +14,9 @@ figure.plot {
   background: var(--card);
   overflow-x: auto;
 }
+figure.plot :deep(svg) {
+  min-width: 520px;
+}
 figcaption {
   font-family: var(--mono);
   font-size: 11.5px;

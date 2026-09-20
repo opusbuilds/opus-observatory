@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import LedgerRow from './LedgerRow.vue'
-import { api } from '@/api/observatory'
 import type { Observation } from '@/types/observatory'
 
 defineProps<{ rows: Observation[] }>()
-
-const frames = (id: string) => api.triage(id)?.frames.length ?? 0
 </script>
 
 <template>
@@ -22,7 +19,7 @@ const frames = (id: string) => api.triage(id)?.frames.length ?? 0
         </tr>
       </thead>
       <tbody>
-        <LedgerRow v-for="r in rows" :key="r.id" :row="r" :frames="frames(r.id)" />
+        <LedgerRow v-for="r in rows" :key="r.id" :row="r" />
       </tbody>
     </table>
   </div>

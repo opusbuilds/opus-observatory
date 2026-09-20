@@ -21,6 +21,7 @@ export interface Observation {
   note: string
   image: string | null
   manifest: string
+  frames: number
   obscode: string | null
 }
 
@@ -43,6 +44,9 @@ export interface Target {
   derived: string
   note: string | null
   faint: boolean
+  opened: number
+  fitted: number
+  floorNights: number
 }
 
 export interface TriageFrame {
@@ -88,10 +92,17 @@ export interface ScoreLine {
   hit: boolean
 }
 
+export interface TransitModel {
+  depth: number
+  ingress: number
+  egress: number
+  ramp: number
+}
+
 export interface FitRecord {
   observationId: string
   lightCurve: { phase: number; flux: number }[]
-  model: { depth: number; ingress: number; egress: number; ramp: number }
+  model: TransitModel
   qc: 'pass' | 'marginal'
   ktmf: number
   barProvenance: BarProvenance

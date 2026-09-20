@@ -12,8 +12,8 @@ export const ocSeries: Record<string, OcSeries> = {
     archiveDrift,
     points: [
       { epoch: 1472, ocMin: { value: 0.26, err: 0.79 }, hollow: false },
-      { epoch: 1476, ocMin: { value: -2.1, err: 1.9 }, hollow: true },
-      { epoch: 1480, ocMin: { value: 1.8, err: 2.2 }, hollow: true },
+      { epoch: 1472, ocMin: { value: -2.1, err: 1.9 }, hollow: true },
+      { epoch: 1472, ocMin: { value: 1.8, err: 2.2 }, hollow: true },
     ],
   },
 }

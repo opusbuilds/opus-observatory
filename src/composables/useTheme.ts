@@ -1,25 +1,43 @@
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 type Theme = 'system' | 'light' | 'dark'
 
-const stored = localStorage.getItem('theme') as Theme | null
-const theme = ref<Theme>(stored ?? 'system')
+const storageKey = 'theme'
+
+function readStored(): Theme {
+  try {
+    const v = localStorage.getItem(storageKey)
+    return v === 'light' || v === 'dark' ? v : 'system'
+  } catch {
+    return 'system'
+  }
+}
+
+function writeStored(theme: Theme) {
+  try {
+    localStorage.setItem(storageKey, theme)
+  } catch {
+    return
+  }
+}
+
+const theme = ref<Theme>(readStored())
+const darkQuery = matchMedia('(prefers-color-scheme: dark)')
+const systemDark = ref(darkQuery.matches)
+darkQuery.addEventListener('change', (e) => (systemDark.value = e.matches))
+
+const resolved = computed<'light' | 'dark'>(() => (theme.value === 'system' ? (systemDark.value ? 'dark' : 'light') : theme.value))
 
 watchEffect(() => {
   const root = document.documentElement
   if (theme.value === 'system') root.removeAttribute('data-theme')
   else root.setAttribute('data-theme', theme.value)
-  localStorage.setItem('theme', theme.value)
+  writeStored(theme.value)
 })
-
-function resolved(): 'light' | 'dark' {
-  if (theme.value !== 'system') return theme.value
-  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
 
 export function useTheme() {
   const toggle = () => {
-    theme.value = resolved() === 'dark' ? 'light' : 'dark'
+    theme.value = resolved.value === 'dark' ? 'light' : 'dark'
   }
-  return { theme, resolved, toggle }
+  return { resolved, toggle }
 }

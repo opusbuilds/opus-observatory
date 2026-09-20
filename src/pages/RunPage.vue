@@ -58,15 +58,7 @@ function runTriage(target: string) {
   font-family: var(--mono);
   font-size: 12.5px;
   background: var(--card);
-}
-.tgt {
-  min-width: 110px;
-}
-.g {
-  color: var(--muted);
-  flex: 1;
-}
-.launch {
+}.launch {
   font-family: var(--mono);
   font-size: 12.5px;
   color: var(--green);

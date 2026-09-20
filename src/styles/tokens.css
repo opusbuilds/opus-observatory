@@ -1,54 +1,27 @@
 :root {
-  --bg: #faf9f5;
-  --ink: #22231f;
-  --muted: #6e7067;
-  --faint: #9a9c92;
-  --line: #e4e3da;
-  --line2: #d2d1c6;
-  --card: #ffffff;
-  --green: #2f7a4d;
-  --green-soft: #e7f0e9;
-  --red: #b6452f;
-  --amber: #8a6d1f;
-  --amber-soft: #f3edda;
-  --rej: #f0efe8;
-  --rej-ink: #797b71;
+  color-scheme: light dark;
+  --bg: light-dark(#faf9f5, #161613);
+  --ink: light-dark(#22231f, #e4e2d8);
+  --muted: light-dark(#6e7067, #95978c);
+  --faint: light-dark(#9a9c92, #6f7168);
+  --line: light-dark(#e4e3da, #2b2b26);
+  --line2: light-dark(#d2d1c6, #3a3a33);
+  --card: light-dark(#ffffff, #1d1d19);
+  --green: light-dark(#2f7a4d, #5cae7f);
+  --green-soft: light-dark(#e7f0e9, #1f2b23);
+  --red: light-dark(#b6452f, #d2705a);
+  --amber: light-dark(#8a6d1f, #c2a04e);
+  --amber-soft: light-dark(#f3edda, #2b2618);
+  --rej: light-dark(#f0efe8, #20201c);
+  --rej-ink: light-dark(#797b71, #83857a);
   --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --serif: 'Source Serif 4', Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #161613;
-    --ink: #e4e2d8;
-    --muted: #95978c;
-    --faint: #6f7168;
-    --line: #2b2b26;
-    --line2: #3a3a33;
-    --card: #1d1d19;
-    --green: #5cae7f;
-    --green-soft: #1f2b23;
-    --red: #d2705a;
-    --amber: #c2a04e;
-    --amber-soft: #2b2618;
-    --rej: #20201c;
-    --rej-ink: #83857a;
-  }
+:root[data-theme='light'] {
+  color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #161613;
-  --ink: #e4e2d8;
-  --muted: #95978c;
-  --faint: #6f7168;
-  --line: #2b2b26;
-  --line2: #3a3a33;
-  --card: #1d1d19;
-  --green: #5cae7f;
-  --green-soft: #1f2b23;
-  --red: #d2705a;
-  --amber: #c2a04e;
-  --amber-soft: #2b2618;
-  --rej: #20201c;
-  --rej-ink: #83857a;
+  color-scheme: dark;
 }

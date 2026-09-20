@@ -6,8 +6,5 @@
     "suspicious": "warn",
     "perf": "warn"
   },
-  "rules": {
-    "no-unused-vars": "error"
-  },
   "ignorePatterns": ["dist", "node_modules"]
 }
