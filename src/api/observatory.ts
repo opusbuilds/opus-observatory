@@ -1,5 +1,4 @@
-import { candidates, listing } from '@/data/listing'
-import type { CrossCheck, Ephemeris, FitRecord, Observation, OcPoint, OcSeries, Target, Totals, TriageRecord } from '@/types/observatory'
+import type { CrossCheck, Ephemeris, FitRecord, ListingNight, Observation, OcPoint, OcSeries, Target, Totals, TriageRecord } from '@/types/observatory'
 
 const BASE = 'https://opusgarden.dev/data/observatory'
 const MIN_PER_DAY = 1440
@@ -9,6 +8,7 @@ const published = {
   targets: [] as Target[],
   totals: { opened: 0, fitted: 0, passing: 0, submitted: 0 } as Totals,
   crossChecks: [] as CrossCheck[],
+  listing: [] as ListingNight[],
 }
 export const source = { live: false, generated: '' }
 
@@ -19,14 +19,16 @@ async function json<T>(name: string): Promise<T> {
 }
 
 export async function loadPublished() {
-  const [observations, targets, totals, index, crossChecks] = await Promise.all([
+  const [observations, targets, totals, index, crossChecks, listing] = await Promise.all([
     json<Observation[]>('observations.json'),
     json<Target[]>('targets.json'),
     json<Totals>('totals.json'),
     json<{ generated: string }>('index.json'),
     json<CrossCheck[]>('crosschecks.json').catch(() => [] as CrossCheck[]),
+    json<ListingNight[]>('listing.json').catch(() => [] as ListingNight[]),
   ])
   published.crossChecks = crossChecks
+  published.listing = listing
   published.observations = observations
   published.targets = targets
   published.totals = totals
@@ -94,6 +96,5 @@ export const api = {
   triage: (_observationId: string): TriageRecord | null => null,
   fit: (_observationId: string): FitRecord | null => null,
   crossChecks: (observationId: string): CrossCheck[] => published.crossChecks.filter((c) => c.observationId === observationId),
-  listing: () => listing,
-  candidates: () => candidates,
+  listing: () => published.listing,
 }

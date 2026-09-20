@@ -10,7 +10,6 @@ const links = [
   { to: '/targets', label: 'targets' },
   { to: '/nights', label: 'nights' },
   { to: '/method', label: 'method' },
-  { to: '/run', label: 'run', phase: 'phase 2' },
 ]
 </script>
 
@@ -28,7 +27,7 @@ const links = [
     </div>
     <nav class="top">
       <RouterLink v-for="l in links" :key="l.to" :to="l.to" active-class="on">
-        {{ l.label }}<span v-if="l.phase" class="p2"> ({{ l.phase }})</span>
+        {{ l.label }}
       </RouterLink>
     </nav>
   </header>

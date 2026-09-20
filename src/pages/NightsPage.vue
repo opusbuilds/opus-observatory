@@ -11,15 +11,15 @@ const listing = api.listing()
   <h1>Nights</h1>
   <p class="lede">The listing, night by night, as the scan sees it: which targets had a transit in the window, and what became of each. This is the page that shows how much sky there is and how little of it is usable.</p>
   <div v-for="n in listing" :key="n.date" class="calnight">
-    <div class="head">{{ n.date }}</div>
+    <div class="head">{{ n.date }}<template v-if="n.growing"> · scanned while the night was still running</template></div>
     <div v-for="e in n.entries" :key="e.target" class="row">
       <span class="tgt">{{ e.target }}</span>
       <span class="g">{{ e.geometry }}<template v-if="e.notOpened"> · not opened, {{ e.notOpened }}</template></span>
-      <GoLink v-if="e.observationId && known.has(e.observationId)" :to="{ name: 'night', params: { id: e.observationId } }">night page</GoLink><span v-else-if="e.observationId" class="g">example listing; not a ledger night</span>
+      <GoLink v-if="e.observationId && known.has(e.observationId)" :to="{ name: 'night', params: { id: e.observationId } }">night page</GoLink>
       <span v-else class="dim">not opened</span>
     </div>
   </div>
-  <p class="faintline">four nights of the listing shown; the real page scrolls the season.</p>
+  <p v-if="!listing.length" class="faintline">no listing published yet.</p>
 </template>
 
 <style scoped>

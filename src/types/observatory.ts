@@ -147,6 +147,8 @@ export interface ListingEntry {
 
 export interface ListingNight {
   date: string
+  scanned?: string
+  growing?: boolean
   entries: ListingEntry[]
 }
 
