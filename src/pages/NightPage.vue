@@ -88,7 +88,7 @@ const ratios = computed(() => {
           title="bar provenance"
           :value="fit.barProvenance"
           :tone="fit.barProvenance === 'posterior' ? 'green' : undefined"
-          :sub="fit.barProvenance === 'posterior' ? 'post-run check: printed bar came from the posterior, not the replacing estimator' : 'post-run check: printed bar came from the replacing estimator'"
+          :sub="fit.barProvenance === 'posterior' ? 'post-run check: printed bar came from the posterior, not the replacing estimator' : fit.barProvenance === 'replaced' ? 'post-run check: printed bar came from the replacing estimator' : 'this fit predates the post-run bar check'"
         />
         <MiniCard title="QC / KTMF" :value="`${fit.qc} · ${fit.ktmf.toFixed(2)}`" sub="quality gate and KTMF score" />
       </CardRow>
