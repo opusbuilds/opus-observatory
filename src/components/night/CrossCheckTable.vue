@@ -9,7 +9,7 @@ defineProps<{ checks: CrossCheck[] }>()
   <div class="tbl-scroll">
     <table class="ledger">
       <thead>
-        <tr><th>source</th><th class="num">mid-time O−C (min)</th><th class="num">depth</th><th class="num">scatter</th><th>note</th></tr>
+        <tr><th>source</th><th class="num">O−C vs archive (min)</th><th class="num">depth</th><th class="num">scatter</th><th>note</th></tr>
       </thead>
       <tbody>
         <tr v-for="c in checks" :key="c.source">
