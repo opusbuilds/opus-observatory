@@ -42,14 +42,20 @@ function ocSeries(name: string): OcSeries | null {
   if (!t || !rows.length || !usable(t.archive)) return null
   const archive = t.archive
   const exo = usable(t.exoclock) ? t.exoclock : null
-  const shift = (epoch: number) => (exo ? (predict(archive, epoch) - predict(exo, epoch)) * MIN_PER_DAY : 0)
+  const nearest = (e: Usable, when: number) => predict(e, Math.round((when - e.t0) / e.period))
+  const shift = (epoch: number) => {
+    if (!exo) return 0
+    const when = predict(archive, epoch)
+    return (when - nearest(exo, when)) * MIN_PER_DAY
+  }
   const epochs = rows.map((r) => r.epoch as number)
   const lo = Math.min(...epochs) - 20
   const hi = Math.max(...epochs) + 20
   const points: OcPoint[] = rows.map((r) => {
     const oc = r.ocMin as { value: number; err: number }
     const epoch = r.epoch as number
-    return { epoch, ocMin: { value: +(oc.value + shift(epoch)).toFixed(2), err: oc.err }, hollow: false }
+    const value = exo && r.tmid != null ? (r.tmid - nearest(exo, r.tmid)) * MIN_PER_DAY : oc.value
+    return { epoch, ocMin: { value: +value.toFixed(2), err: oc.err }, hollow: false }
   })
   const archiveDrift = exo
     ? Array.from({ length: 41 }, (_, i) => {
