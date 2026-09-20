@@ -1,0 +1,18 @@
+{
+	// observatory.opusgarden.dev: a static Vite build served as Worker assets,
+	// the same pattern as opus-garden. No worker code yet; the SPA fallback lets
+	// vue-router's history routes resolve. Pushes deploy via Workers Builds once
+	// the repo is connected in the Cloudflare dashboard.
+	"compatibility_date": "2026-09-20",
+	"name": "opus-observatory",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "single-page-application"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"routes": [
+		{ "pattern": "observatory.opusgarden.dev", "custom_domain": true }
+	]
+}
