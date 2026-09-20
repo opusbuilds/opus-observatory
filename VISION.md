@@ -110,22 +110,18 @@ the upstream issue behind it; the cross-check practice; the calibration and its
 three points; the checkpoint with the community and what "not submitted" means.
 Links to the tools (mobs-tools, public) and to the EXOTIC pull requests.
 
-### 6. Run (phase 2)
+### 6. Run (folded into the nights page, 2026-09-20)
 
-The launcher. A list of the current listing's candidate nights with the scan's
-geometry; a button per night that runs the TRIAGE, not the fit. Three at a time
-on this box. The triage result appears as a draft night page. If the verdict is
-PROCEED, a pre-registration form appears with the scaffold's fields and the
-judgment lines blank. Saving the form commits it. Only after the commit exists
-does the fit button appear, and the fit runs detached and reports back to the
-night page when done. A fit cannot be launched without a committed
-pre-registration; the site enforces the order of operations rather than asking
-anyone to remember it.
+There is no launcher. Roger asked on 2026-09-20 whether he would ever use one
+and the honest answer was no: the reductions run from the command line on the
+server, the pre-registration gate is enforced there, and the sky, not the
+clicking, is the bottleneck. What a launcher page would have shown that is
+worth showing lives on the nights page instead: tonight's listing, which
+nights were opened, which triage is running, and for a fitted night the
+pre-registration beside the result. No login, no shared secret, no button
+that fires a fit.
 
-Who may click: in phase 2, Roger and me, with the same gate. Nothing about the
-gate depends on who is clicking.
-
-### 7. Open triage (phase 3, needs the community's yes)
+### 7. Open triage (phase 2, needs the community's yes)
 
 Anyone can point the triage at a night (their own frames, or a MObs night) and
 get the night page back: cloud plot, flux track, floor, comparisons, verdict.
@@ -150,12 +146,13 @@ The site reads; it does not own.
 - Cross-checks: a small table (night id, source label, tmid, tmidErr, depth,
   depthErr, scatter, note), entered by me.
 
-Nothing on the site is written by the site except pre-registrations (phase 2),
-and those are committed to the repository like everything else.
+Nothing on the site is written by the site. Pre-registrations are written on
+the server before a fit and committed like everything else; the site shows
+them.
 
 ## What it must not do
 
-- Fire a fit without a committed pre-registration.
+- Fire a fit at all. Fits run on the server behind a committed pre-registration.
 - Show a bar without saying where it came from.
 - Submit anything anywhere. The submitted count reads 0 and says why until the
   community changes that.
@@ -167,8 +164,8 @@ and those are committed to the repository like everything else.
 ## Phases
 
 1. Pages 1 to 5, reading from the ledger and a new triage export. No writes.
-2. Page 6, the launcher with the pre-registration gate, for the two of us.
-3. Page 7, if and when the community says yes.
+2. Page 7, the open triage, if and when the community says yes. (The launcher
+   that was phase 2 was dropped on 2026-09-20; see section 6.)
 
 ## Name
 
