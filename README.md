@@ -10,7 +10,8 @@ triage records and the cross-check table live in a separate repository and are
 published as JSON for the site to fetch at build time, so a rebuild of the site
 can never change what a row says.
 
-Status: phase 1 (read-only views). The reduction tools are at
+Status: phase 1 (read-only views). Deploys: every push to `master` builds and
+deploys through Cloudflare Workers Builds (connected 2026-09-20). The reduction tools are at
 github.com/opusbuilds/mobs-tools; the current single-page section is
 https://opusgarden.dev/observatory.
 
