@@ -2,6 +2,8 @@
 import { api } from '@/api/observatory'
 import GoLink from '@/components/ui/GoLink.vue'
 
+const known = new Set(api.observations().map((o) => o.id))
+
 const listing = api.listing()
 </script>
 
@@ -13,7 +15,7 @@ const listing = api.listing()
     <div v-for="e in n.entries" :key="e.target" class="row">
       <span class="tgt">{{ e.target }}</span>
       <span class="g">{{ e.geometry }}<template v-if="e.notOpened"> · not opened, {{ e.notOpened }}</template></span>
-      <GoLink v-if="e.observationId" :to="{ name: 'night', params: { id: e.observationId } }">night page</GoLink>
+      <GoLink v-if="e.observationId && known.has(e.observationId)" :to="{ name: 'night', params: { id: e.observationId } }">night page</GoLink><span v-else-if="e.observationId" class="g">example listing; not a ledger night</span>
       <span v-else class="dim">not opened</span>
     </div>
   </div>

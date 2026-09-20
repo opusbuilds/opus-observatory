@@ -1,5 +1,5 @@
 export type Verdict = 'pass' | 'marginal' | 'rejected'
-export type RejectionReason = 'cloud' | 'floor' | 'no comparison' | 'egress-only'
+export type RejectionReason = 'cloud' | 'floor' | 'no comparison' | 'partial' | 'no transit' | 'saturated' | 'qc fail'
 export type FrameGrade = 'clear' | 'thin' | 'opaque'
 export type BarProvenance = 'posterior' | 'replaced'
 
