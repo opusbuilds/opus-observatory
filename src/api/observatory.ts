@@ -10,6 +10,7 @@ const published = {
   crossChecks: [] as CrossCheck[],
   listing: [] as ListingNight[],
   triage: new Map<string, TriageRecord>(),
+  fits: new Map<string, FitRecord>(),
 }
 export const source = { live: false, generated: '' }
 
@@ -33,6 +34,9 @@ export async function loadPublished() {
   const ids = await json<string[]>('triage/index.json').catch(() => [] as string[])
   const records = await Promise.all(ids.map((id) => json<TriageRecord>(`triage/${id}.json`).catch(() => null)))
   for (const r of records) if (r) published.triage.set(r.observationId, r)
+  const fitIds = await json<string[]>('fits/index.json').catch(() => [] as string[])
+  const fits = await Promise.all(fitIds.map((id) => json<FitRecord>(`fits/${id}.json`).catch(() => null)))
+  for (const r of fits) if (r) published.fits.set(r.observationId, r)
   published.observations = observations
   published.targets = targets
   published.totals = totals
@@ -98,7 +102,7 @@ export const api = {
   faintSentence: () => faintSentence,
   ocSeries,
   triage: (observationId: string): TriageRecord | null => published.triage.get(observationId) ?? null,
-  fit: (_observationId: string): FitRecord | null => null,
+  fit: (observationId: string): FitRecord | null => published.fits.get(observationId) ?? null,
   crossChecks: (observationId: string): CrossCheck[] => published.crossChecks.filter((c) => c.observationId === observationId),
   listing: () => published.listing,
 }

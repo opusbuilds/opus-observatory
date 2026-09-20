@@ -1,7 +1,7 @@
 export type Verdict = 'pass' | 'marginal' | 'rejected'
 export type RejectionReason = 'cloud' | 'floor' | 'no comparison' | 'partial' | 'no transit' | 'saturated' | 'qc fail'
 export type FrameGrade = 'clear' | 'thin' | 'opaque'
-export type BarProvenance = 'posterior' | 'replaced'
+export type BarProvenance = 'posterior' | 'replaced' | 'unchecked'
 
 export interface Measurement {
   value: number
@@ -106,11 +106,12 @@ export interface TransitModel {
 export interface FitRecord {
   observationId: string
   lightCurve: { phase: number; flux: number }[]
+  modelCurve?: { phase: number; flux: number }[]
   model: TransitModel
   qc: 'pass' | 'marginal'
   ktmf: number
   barProvenance: BarProvenance
-  preRegistration: { commit: string; committedAt: string; fitStartedAt: string }
+  preRegistration: { commit: string; committedAt: string; fitStartedAt: string; text?: string }
   scorecard: ScoreLine[]
 }
 

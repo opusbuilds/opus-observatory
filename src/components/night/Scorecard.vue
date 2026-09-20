@@ -21,9 +21,10 @@ defineProps<{ fit: FitRecord }>()
     </table>
   </div>
   <p class="hash">
-    pre-registration commit <a :href="`https://github.com/opusbuilds/mobs-tools/commit/${fit.preRegistration.commit}`">{{ fit.preRegistration.commit }}</a>
-    · committed {{ fit.preRegistration.committedAt }} · fit started {{ fit.preRegistration.fitStartedAt }} · the order is checkable by anyone.
+    pre-registration commit <code>{{ fit.preRegistration.commit }}</code>
+    · committed {{ fit.preRegistration.committedAt }} · fit started {{ fit.preRegistration.fitStartedAt }} · the order is checkable: the commit predates the fit.
   </p>
+  <details v-if="fit.preRegistration.text" class="prereg"><summary>the pre-registration as committed</summary><pre>{{ fit.preRegistration.text }}</pre></details>
 </template>
 
 <style scoped>

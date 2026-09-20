@@ -18,7 +18,9 @@ const sc = computed(() => {
 const points = computed(() => props.fit.lightCurve.map((p) => ({ cx: sc.value.x(p.phase), cy: sc.value.y(p.flux) })))
 
 const modelPath = computed(() =>
-  polyline(Array.from({ length: 121 }, (_, i) => [sc.value.x(i / 120), sc.value.y(transitFlux(i / 120, props.fit.model))])),
+  props.fit.modelCurve?.length
+    ? polyline(props.fit.modelCurve.map((p) => [sc.value.x(p.phase), sc.value.y(p.flux)]))
+    : polyline(Array.from({ length: 121 }, (_, i) => [sc.value.x(i / 120), sc.value.y(transitFlux(i / 120, props.fit.model))])),
 )
 </script>
 
