@@ -14,9 +14,9 @@ defineProps<{ checks: CrossCheck[] }>()
       <tbody>
         <tr v-for="c in checks" :key="c.source">
           <td>{{ c.source }}</td>
-          <td class="num">{{ withBar(c.ocMin, 2, true) }}</td>
-          <td class="num">{{ c.depth.toFixed(4) }}</td>
-          <td class="num">{{ percent(c.scatterPct) }}</td>
+          <td class="num">{{ c.ocMin ? withBar(c.ocMin, 2, true) : '—' }}</td>
+          <td class="num">{{ c.depth != null ? c.depth.toFixed(4) : '—' }}</td>
+          <td class="num">{{ c.scatterPct != null ? percent(c.scatterPct) : '—' }}</td>
           <td class="dim">{{ c.note }}</td>
         </tr>
       </tbody>

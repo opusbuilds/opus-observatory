@@ -8,6 +8,7 @@ const published = {
   observations: [] as Observation[],
   targets: [] as Target[],
   totals: { opened: 0, fitted: 0, passing: 0, submitted: 0 } as Totals,
+  crossChecks: [] as CrossCheck[],
 }
 export const source = { live: false, generated: '' }
 
@@ -18,12 +19,14 @@ async function json<T>(name: string): Promise<T> {
 }
 
 export async function loadPublished() {
-  const [observations, targets, totals, index] = await Promise.all([
+  const [observations, targets, totals, index, crossChecks] = await Promise.all([
     json<Observation[]>('observations.json'),
     json<Target[]>('targets.json'),
     json<Totals>('totals.json'),
     json<{ generated: string }>('index.json'),
+    json<CrossCheck[]>('crosschecks.json').catch(() => [] as CrossCheck[]),
   ])
+  published.crossChecks = crossChecks
   published.observations = observations
   published.targets = targets
   published.totals = totals
@@ -57,13 +60,22 @@ function ocSeries(name: string): OcSeries | null {
     const value = exo && r.tmid != null ? (r.tmid - nearest(exo, r.tmid)) * MIN_PER_DAY : oc.value
     return { epoch, ocMin: { value: +value.toFixed(2), err: oc.err }, hollow: false }
   })
+  const hollow: OcPoint[] = rows.flatMap((r) =>
+    published.crossChecks
+      .filter((c) => c.observationId === r.id && c.ocMin && c.tmid != null)
+      .map((c) => {
+        const oc = c.ocMin as { value: number; err: number }
+        const value = exo ? ((c.tmid as number) - nearest(exo, c.tmid as number)) * MIN_PER_DAY : oc.value
+        return { epoch: r.epoch as number, ocMin: { value: +value.toFixed(2), err: oc.err }, hollow: true }
+      }),
+  )
   const archiveDrift = exo
     ? Array.from({ length: 41 }, (_, i) => {
         const epoch = lo + ((hi - lo) * i) / 40
         return { epoch, ocMin: +shift(epoch).toFixed(2), bandMin: +bandMin(archive, epoch).toFixed(2) }
       })
     : []
-  return { epochRange: [lo, hi], exoclockBandMin: +bandMin(exo ?? archive, (lo + hi) / 2).toFixed(2), archiveDrift, points }
+  return { epochRange: [lo, hi], exoclockBandMin: +bandMin(exo ?? archive, (lo + hi) / 2).toFixed(2), archiveDrift, points: [...points, ...hollow] }
 }
 
 const faintSentence =
@@ -81,7 +93,7 @@ export const api = {
   ocSeries,
   triage: (_observationId: string): TriageRecord | null => null,
   fit: (_observationId: string): FitRecord | null => null,
-  crossChecks: (_observationId: string): CrossCheck[] => [],
+  crossChecks: (observationId: string): CrossCheck[] => published.crossChecks.filter((c) => c.observationId === observationId),
   listing: () => listing,
   candidates: () => candidates,
 }

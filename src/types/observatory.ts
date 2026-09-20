@@ -116,9 +116,12 @@ export interface FitRecord {
 export interface CrossCheck {
   observationId: string
   source: string
-  ocMin: Measurement
-  depth: number
-  scatterPct: number
+  tmid: number | null
+  tmidErr: number | null
+  ocMin: Measurement | null
+  depth: number | null
+  depthErr: number | null
+  scatterPct: number | null
   note: string
 }
 
