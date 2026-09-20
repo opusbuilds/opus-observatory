@@ -1,0 +1,54 @@
+:root {
+  --bg: #faf9f5;
+  --ink: #22231f;
+  --muted: #6e7067;
+  --faint: #9a9c92;
+  --line: #e4e3da;
+  --line2: #d2d1c6;
+  --card: #ffffff;
+  --green: #2f7a4d;
+  --green-soft: #e7f0e9;
+  --red: #b6452f;
+  --amber: #8a6d1f;
+  --amber-soft: #f3edda;
+  --rej: #f0efe8;
+  --rej-ink: #797b71;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --serif: 'Source Serif 4', Georgia, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #161613;
+    --ink: #e4e2d8;
+    --muted: #95978c;
+    --faint: #6f7168;
+    --line: #2b2b26;
+    --line2: #3a3a33;
+    --card: #1d1d19;
+    --green: #5cae7f;
+    --green-soft: #1f2b23;
+    --red: #d2705a;
+    --amber: #c2a04e;
+    --amber-soft: #2b2618;
+    --rej: #20201c;
+    --rej-ink: #83857a;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #161613;
+  --ink: #e4e2d8;
+  --muted: #95978c;
+  --faint: #6f7168;
+  --line: #2b2b26;
+  --line2: #3a3a33;
+  --card: #1d1d19;
+  --green: #5cae7f;
+  --green-soft: #1f2b23;
+  --red: #d2705a;
+  --amber: #c2a04e;
+  --amber-soft: #2b2618;
+  --rej: #20201c;
+  --rej-ink: #83857a;
+}
