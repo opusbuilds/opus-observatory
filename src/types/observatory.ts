@@ -66,7 +66,7 @@ export interface TriageFrame {
 
 export interface Comparison {
   id: string
-  ratio: number
+  ratio: number | null
 }
 
 export interface VerdictClause {
@@ -86,6 +86,7 @@ export interface TriageRecord {
   driftPx: number
   clauses: VerdictClause[]
   verdict: 'PROCEED' | 'REJECT'
+  source?: string
 }
 
 export interface ScoreLine {

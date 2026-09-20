@@ -34,7 +34,9 @@ const inWindow = computed(() => {
 const ratios = computed(() => {
   const c = triage.value?.comparisons ?? []
   if (!c.length) return ''
-  return `${Math.min(...c.map((x) => x.ratio))}×–${Math.max(...c.map((x) => x.ratio))}× target`
+  const known = c.map((x) => x.ratio).filter((r): r is number => r !== null)
+  if (!known.length) return 'ratios not recorded'
+  return `${Math.min(...known)}×–${Math.max(...known)}× target`
 })
 </script>
 
@@ -61,7 +63,7 @@ const ratios = computed(() => {
       <MiniCard
         title="comparison box"
         :value="triage.comparisons.length ? `${triage.comparisons.length} comparisons` : 'n/a'"
-        :sub="triage.comparisons.length ? `brightness ratios ${ratios}; drift ${triage.driftPx} px over the night` : 'floor fired before selection'"
+        :sub="triage.comparisons.length ? `brightness ratios ${ratios}; drift ${triage.driftPx} px over the night` : 'comparisons not recorded for this night (tool predates the record)'"
       />
       <MiniCard title="frames" :value="String(triage.frames.length)" :sub="`${inWindow} in window`" />
       <MiniCard title="pointing drift" :value="`${triage.driftPx} px`" sub="track drawn on the reference frame" />
