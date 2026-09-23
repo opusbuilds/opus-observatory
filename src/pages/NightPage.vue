@@ -18,6 +18,30 @@ import { percent, slugify, withBar } from '@/lib/format'
 const props = defineProps<{ id: string }>()
 
 const row = computed(() => api.observation(props.id))
+// The note leads the page, but it is prose and the page's content is the evidence.
+// Row 57's note is ~600 words and filled the whole first screen, pushing every plot
+// below the fold (2026-09-23). Show the first one or two sentences; the rest sits
+// behind a native <details>, so nothing is hidden from anyone who wants it.
+const ABBR = /\b(?:al|e\.g|i\.e|vs|approx|cf|fig|no)\.$/i
+const note = computed(() => {
+  const text = (row.value?.note ?? '').trim()
+  if (text.length <= 420) return { lead: text, rest: '' }
+  const re = /[.!?](?=\s+[A-Z0-9(])/g
+  let cut = -1
+  let sentences = 0
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text))) {
+    const end = m.index + 1
+    if (ABBR.test(text.slice(0, end))) continue
+    sentences += 1
+    if (end >= 180 || sentences >= 2) { cut = end; break }
+  }
+  if (cut < 0 || cut > 480) {
+    const sp = text.lastIndexOf(' ', 360)
+    return { lead: text.slice(0, sp > 0 ? sp : 360) + ' \u2026', rest: text.slice(sp > 0 ? sp : 360).trim() }
+  }
+  return { lead: text.slice(0, cut), rest: text.slice(cut).trim() }
+})
 const triage = computed(() => api.triage(props.id))
 const fit = computed(() => api.fit(props.id))
 const checks = computed(() => api.crossChecks(props.id))
@@ -35,7 +59,7 @@ const ratios = computed(() => {
   const c = triage.value?.comparisons ?? []
   if (!c.length) return ''
   const known = c.map((x) => x.ratio).filter((r): r is number => r !== null)
-  if (!known.length) return 'ratios not recorded'
+  if (!known.length) return 'not recorded'
   return `${Math.min(...known)}×–${Math.max(...known)}× target`
 })
 </script>
@@ -44,7 +68,11 @@ const ratios = computed(() => {
   <template v-if="row">
     <Breadcrumb :trail="[{ label: 'ledger', to: '/' }, { label: row.target, to: { name: 'target', params: { slug: slugify(row.target) } } }, { label: row.obsDate }]" />
     <h1>{{ row.target }} · {{ row.obsDate }}</h1>
-    <p class="lede"><VerdictTag :row="row" />&nbsp;&nbsp;{{ row.note }}</p>
+    <p class="lede"><VerdictTag :row="row" />&nbsp;&nbsp;{{ note.lead }}</p>
+    <details v-if="note.rest" class="fullnote">
+      <summary>full note</summary>
+      <p>{{ note.rest }}</p>
+    </details>
 
     <template v-if="triage">
     <h2>Triage evidence</h2>
@@ -123,6 +151,15 @@ const ratios = computed(() => {
 </template>
 
 <style scoped>
+.fullnote { margin: -0.4rem 0 1.6rem; }
+.fullnote summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.fullnote summary:hover { color: var(--green); }
+.fullnote p { margin-top: 0.6rem; }
 .curve {
   width: 100%;
   height: auto;
