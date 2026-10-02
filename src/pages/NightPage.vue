@@ -140,7 +140,7 @@ const ratios = computed(() => {
         <h2>Cross-check · same frames, other hands</h2>
         <CrossCheckTable :checks="checks" />
         <Aside>
-          Reductions of the same frames, side by side. Names are not shown; the point is the spread, not who produced it. One observer has asked to be excluded and is never looked at, so never appears.
+          Reductions of the same frames, side by side. Names are not shown, and the letters label reductions within this night only; the point is the spread, not who produced it. One observer has asked to be excluded and is never looked at, so never appears.
         </Aside>
       </template>
   </template>
