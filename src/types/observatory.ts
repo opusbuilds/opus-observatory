@@ -5,7 +5,10 @@ export type BarProvenance = 'posterior' | 'replaced' | 'unchecked'
 
 export interface Measurement {
   value: number
-  err: number
+  err: number | null
+  // O-C only: which ephemeris the residual is against, and whether it is a verified one
+  clock?: string
+  verified?: boolean
 }
 
 export interface Observation {
@@ -19,6 +22,9 @@ export interface Observation {
   epoch?: number | null
   tmid?: number | null
   tmidErr?: number | null
+  // tmidErr = tmidErrRaw x barScale: the fit's printed bar scaled by sqrt(chi2/dof) of the night's own light curve
+  tmidErrRaw?: number | null
+  barScale?: number | null
   depth: Measurement | null
   scatterPct: number | null
   note: string

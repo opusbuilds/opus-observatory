@@ -11,7 +11,7 @@ const hollowSpacingPx = 14
 
 const yAxis = computed(() => {
   const values = [
-    ...props.series.points.flatMap((p) => [p.ocMin.value - p.ocMin.err, p.ocMin.value + p.ocMin.err]),
+    ...props.series.points.flatMap((p) => [p.ocMin.value - (p.ocMin.err ?? 0), p.ocMin.value + (p.ocMin.err ?? 0)]),
     ...props.series.archiveDrift.flatMap((d) => [d.ocMin - d.bandMin, d.ocMin + d.bandMin]),
     -props.series.exoclockBandMin,
     props.series.exoclockBandMin,
@@ -49,8 +49,8 @@ const points = computed(() => {
       hollow: p.hollow,
       cx: sc.value.x(p.epoch) + dx,
       cy: sc.value.y(p.ocMin.value),
-      y1: sc.value.y(p.ocMin.value - p.ocMin.err),
-      y2: sc.value.y(p.ocMin.value + p.ocMin.err),
+      y1: sc.value.y(p.ocMin.value - (p.ocMin.err ?? 0)),
+      y2: sc.value.y(p.ocMin.value + (p.ocMin.err ?? 0)),
     }
   })
 })

@@ -14,6 +14,16 @@ import CardRow from '@/components/ui/CardRow.vue'
 import MiniCard from '@/components/ui/MiniCard.vue'
 import VerdictTag from '@/components/ui/VerdictTag.vue'
 import { percent, slugify, withBar } from '@/lib/format'
+import type { Observation } from '@/types/observatory'
+
+// Which clock the residual is against, and, when the bar was rescaled to the night's own scatter, from what.
+function ocCaption(r: Observation): string {
+  const clock = r.ocMin?.clock ? `against ${r.ocMin.clock}${r.ocMin.verified ? ' (verified)' : ''}` : 'against the archive ephemeris'
+  if (r.barScale && r.tmidErrRaw) {
+    return `${clock}; bar is the fit's ${(r.tmidErrRaw * 1440).toFixed(1)} min x ${r.barScale.toFixed(2)}, scaled to this night's scatter`
+  }
+  return clock
+}
 
 const props = defineProps<{ id: string }>()
 
@@ -110,7 +120,7 @@ const ratios = computed(() => {
         <template #caption>Detrended light curve with the fitted model. Grey points, one red model line.</template>
       </PlotFrame>
       <CardRow>
-        <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" sub="against the archive ephemeris; the target page shows ExoClock where checked" />
+        <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" :sub="ocCaption(row)" />
         <MiniCard title="depth R²ₚ/R²★" :value="withBar(row.depth, 4)" :sub="`scatter ${percent(row.scatterPct)}`" />
         <MiniCard
           title="bar provenance"
@@ -131,7 +141,7 @@ const ratios = computed(() => {
           <template #caption>The reduction's light curve as produced. The fitted model, the bar check and the pre-registration scorecard will appear here when the fit records are published.</template>
         </PlotFrame>
         <CardRow v-if="row.ocMin && row.depth && row.scatterPct !== null">
-          <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" sub="against the archive ephemeris; the target page shows ExoClock where checked" />
+          <MiniCard title="mid-time O−C" :value="`${withBar(row.ocMin, 2, true)} min`" :sub="ocCaption(row)" />
           <MiniCard title="depth R²ₚ/R²★" :value="withBar(row.depth, 4)" :sub="`scatter ${percent(row.scatterPct)}`" />
         </CardRow>
       </template>

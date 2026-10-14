@@ -13,7 +13,8 @@ export function plain(n: number, digits = 2) {
 
 export function withBar(m: Measurement, digits = 2, sign = false) {
   const v = sign ? signed(m.value, digits) : plain(m.value, digits)
-  return `${v} ± ${plain(m.err, digits)}`
+  // A missing error is shown as missing, never as zero (a '± 0.0000' depth was on the site until 2026-10-14)
+  return m.err == null ? `${v} ± n/a` : `${v} ± ${plain(m.err, digits)}`
 }
 
 export function percent(n: number, digits = 2) {
